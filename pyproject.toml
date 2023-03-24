@@ -29,23 +29,23 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.6,<3.9"
+python = ">=3.8,<3.11"
 
 [tool.poetry.dev-dependencies]
-mypy = "^0.780"
+mypy = "*"
 
-wemake-python-styleguide = "^0.14"
-flake8-pytest-style = "^1.2"
-nitpick = "^0.22"
+wemake-python-styleguide = "*"
+flake8-pytest-style = "*"
+nitpick = "*"
 
-safety = "^1.9"
+safety = "*"
 
-pytest = "^5.4"
-pytest-cov = "^2.10"
-pytest-randomly = "^3.4"
+pytest = "*"
+pytest-cov = "*"
+pytest-randomly = "*"
 
-sphinx = "^3.1"
-sphinx-autodoc-typehints = "^1.11"
-doc8 = "^0.8"
-m2r2 = "^0.2"
-tomlkit = "^0.6"
+sphinx = "*"
+sphinx-autodoc-typehints = "*"
+doc8 = "*"
+m2r2 = "*"
+tomlkit = "*"
