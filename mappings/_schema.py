@@ -11,7 +11,8 @@ class Schema(Generic[T]):
     model: T
     total: bool
 
-    def cast(self, data: Mapping[str, Any]) -> Mapping[str, Any]:
+    @classmethod
+    def cast(cls, data: Mapping[str, Any]) -> Mapping[str, Any]:
         return data
 
 
