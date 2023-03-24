@@ -69,6 +69,7 @@ $RECYCLE.BIN/
 __pycache__/
 *.py[cod]
 *$py.class
+.*_cache/
 
 # C extensions
 *.so
