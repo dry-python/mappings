@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import mappings
 
 
-def test_cast_is_noop():
+def test_cast_is_noop() -> None:
     @mappings.schema
     class User:
         name: str
 
-    assert User.cast({'name': 'Mark'}) == {'name': 'Mark'}
+    assert mappings.cast(User, {'name': 'Mark'}) == {'name': 'Mark'}
