@@ -22,10 +22,10 @@ repository = "https://github.com/dry-python/mappings"
 keywords = []
 
 classifiers = [
-  "Development Status :: 3 - Alpha",
-  "Intended Audience :: Developers",
-  "Operating System :: OS Independent",
-  "Topic :: Software Development :: Libraries :: Python Modules",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
 [tool.poetry.dependencies]
@@ -70,3 +70,20 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 warn_unused_configs = true
 warn_unreachable = true
+
+
+[tool.pytest.ini_options]
+norecursedirs = [
+    "docs",
+    "examples",
+]
+addopts = [
+    "--strict-markers",
+    "--tb=short",
+    "--doctest-modules",
+    "--cov=mappings",
+    "--cov-report=term:skip-covered",
+    "--cov-report=html",
+    "--cov-branch",
+    "--cov-fail-under=100",
+]

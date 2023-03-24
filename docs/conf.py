@@ -16,6 +16,7 @@ import os
 import sys
 
 import tomlkit
+from pathlib import Path
 
 sys.path.insert(0, os.path.abspath('..'))
 
@@ -23,9 +24,8 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 def _get_project_meta():
-    with open('../pyproject.toml') as pyproject:
-        file_contents = pyproject.read()
-
+    path = Path(__file__).parent.parent / 'pyproject.toml'
+    file_contents = path.read_text()
     return tomlkit.parse(file_contents)['tool']['poetry']
 
 
