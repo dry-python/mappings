@@ -7,15 +7,18 @@
 
 Like attrs, but for dicts
 
+What it can do:
 
-## Features
++ Generate TypedDict from pydantic models, attrs schemas, and dataclasses.
++ Validate dicts using TypedDict at runtime.
 
-- Fully typed with annotations and checked with mypy, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
-- Add yours!
+Why it's cool:
 
++ Supports multiple schema formats.
++ 100% type safe.
 
 ## Installation
 
 ```bash
-pip install mappings
+python3 -m pip install mappings
 ```
