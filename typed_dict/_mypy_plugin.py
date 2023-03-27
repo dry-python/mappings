@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import Callable
 
-import mypy.nodes
-import mypy.types
+from mypy import nodes, types
 from mypy.plugin import (
     DynamicClassDefContext,
     Plugin,
@@ -14,17 +13,23 @@ from ._from import from_dataclass
 
 FROM_DATACLASS_FULLNAME = f'{from_dataclass.__module__}.{from_dataclass.__qualname__}'
 FALLBACKS = (
-    "typing._TypedDict",
-    "typing_extensions._TypedDict",
-    "mypy_extensions._TypedDict",
+    'typing._TypedDict',
+    'typing_extensions._TypedDict',
+    'mypy_extensions._TypedDict',
 )
 
 
 class TypedDictPlugin(Plugin):
+    """Mypy plugin to generate TypedDict.
+
+    https://mypy.readthedocs.io/en/stable/extending_mypy.html
+    """
+
     def get_dynamic_class_hook(
         self,
         fullname: str,
     ) -> Callable[[DynamicClassDefContext], None] | None:
+        """Implements mypy callback."""
         if fullname == FROM_DATACLASS_FULLNAME:
             return self._from_dataclass_callback
         return None
@@ -34,48 +39,48 @@ class TypedDictPlugin(Plugin):
         ctx: DynamicClassDefContext,
     ) -> None:
         first_arg = ctx.call.args[0]
-        assert isinstance(first_arg, mypy.nodes.NameExpr)
-        assert isinstance(first_arg.node, mypy.nodes.TypeInfo)
+        if not isinstance(first_arg, nodes.NameExpr):
+            return
+        if not isinstance(first_arg.node, nodes.TypeInfo):
+            return
         ctx.api.add_symbol_table_node(
-            ctx.name, mypy.nodes.SymbolTableNode(
-                kind=mypy.nodes.GDEF,
+            ctx.name, nodes.SymbolTableNode(
+                kind=nodes.GDEF,
                 node=self._build_typeddict_typeinfo(
                     api=ctx.api,
                     name=first_arg.node.name,
                     names=first_arg.node.names,
                     required_keys=set(),
                     line=ctx.call.line,
-                )
+                ),
             ),
         )
 
-    def _build_typeddict_typeinfo(
+    def _build_typeddict_typeinfo(  # noqa: WPS211
         self,
         api: SemanticAnalyzerPluginInterface,
         name: str,
-        names: mypy.nodes.SymbolTable,
+        names: nodes.SymbolTable,
         required_keys: set[str],
         line: int,
-    ) -> mypy.nodes.TypeInfo:
+    ) -> nodes.TypeInfo:
         fallback = self._get_fallback(api)
-        info = api.basic_new_typeinfo(name, fallback, line)
+        type_info = api.basic_new_typeinfo(name, fallback, line)
         any_type = api.lookup_fully_qualified('typing.Any').type
         assert any_type is not None
-        items: dict[str, mypy.types.Type]
-        items = {name: node.type or any_type for name, node in names.items()}
-        info.update_typeddict_type(
-            mypy.types.TypedDictType(
-                items=items,
+        type_info.update_typeddict_type(
+            types.TypedDictType(
+                items={name: node.type or any_type for name, node in names.items()},
                 required_keys=required_keys,
                 fallback=fallback,
             ),
         )
-        return info
+        return type_info
 
     def _get_fallback(
         self,
         api: SemanticAnalyzerPluginInterface,
-    ) -> mypy.types.Instance:
+    ) -> types.Instance:
         for name in FALLBACKS:
             fallback = api.named_type_or_none(name, [])
             if fallback is not None:
@@ -84,4 +89,5 @@ class TypedDictPlugin(Plugin):
 
 
 def plugin(version: str) -> type[Plugin]:
+    """Mypy plugin entry point."""
     return TypedDictPlugin
