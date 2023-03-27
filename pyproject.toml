@@ -8,7 +8,7 @@ style = "https://raw.githubusercontent.com/wemake-services/wemake-python-stylegu
 
 
 [tool.poetry]
-name = "mappings"
+name = "typed_dict"
 description = "Like attrs, but for dicts!"
 version = "0.1.0"
 license = "BSD-3-Clause"
@@ -51,7 +51,7 @@ m2r2 = "*"
 tomlkit = "*"
 
 [tool.mypy]
-files = ["mappings", "tests"]
+files = ["typed_dict", "tests"]
 python_version = "3.8"
 
 allow_redefinition = false
@@ -81,7 +81,7 @@ addopts = [
     "--strict-markers",
     "--tb=short",
     "--doctest-modules",
-    "--cov=mappings",
+    "--cov=typed_dict",
     "--cov-report=term:skip-covered",
     "--cov-report=html",
     "--cov-branch",

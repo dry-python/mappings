@@ -46,7 +46,7 @@ We use `mypy` to run type checks on our code.
 To use it:
 
 ```bash
-mypy mappings tests/**/*.py
+mypy typed_dict tests/**/*.py
 ```
 
 This step is mandatory during the CI.
