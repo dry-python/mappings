@@ -36,6 +36,12 @@ tasks:
     cmds:
       - poetry run flake8 {{.CLI_ARGS}} .
 
+  isort:
+    deps:
+      - install
+    cmds:
+      - poetry run isort {{.CLI_ARGS}} .
+
   poetry-check:
     sources:
       - pyproject.toml
@@ -54,8 +60,9 @@ tasks:
       - poetry run pip check
 
   all:
-    desc: run all linters and tests
+    desc: run all code formatters, linters, and tests
     cmds:
+      - task: isort
       - task: mypy
       - task: flake8
       - task: poetry-check

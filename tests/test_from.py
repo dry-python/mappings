@@ -1,6 +1,8 @@
 from dataclasses import dataclass
-import typed_dict
+
 from typing_extensions import NotRequired
+
+import typed_dict
 
 
 def test_from_dataclass():

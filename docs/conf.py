@@ -14,9 +14,9 @@
 
 import os
 import sys
+from pathlib import Path
 
 import tomlkit
-from pathlib import Path
 
 sys.path.insert(0, os.path.abspath('..'))
 

@@ -1,11 +1,13 @@
 from __future__ import annotations
+
 import dataclasses
 import inspect
 from types import FunctionType
 from typing import Any, TypedDict
-from typed_dict._types import DataclassType, TypedDictType
 
 from typing_extensions import NotRequired
+
+from typed_dict._types import DataclassType, TypedDictType
 
 
 def from_function(

@@ -1,6 +1,7 @@
 from __future__ import annotations
-from typing import Any, ClassVar, Protocol
+
 from dataclasses import Field
+from typing import Any, ClassVar, Protocol
 
 
 class TypedDictType(Protocol):
