@@ -3,7 +3,7 @@ import dataclasses
 import inspect
 from types import FunctionType
 from typing import Any, TypedDict
-from ._types import DataclassType, TypedDictType
+from typed_dict._types import DataclassType, TypedDictType
 
 from typing_extensions import NotRequired
 
@@ -28,7 +28,11 @@ def from_function(
         if param.default is not param.empty:
             field_type = NotRequired[field_type]  # pyright: ignore
         fields[name] = field_type
-    return TypedDict(func.__name__, fields, total=total)  # type: ignore[operator]
+    return TypedDict(
+        func.__name__,  # type: ignore[operator]
+        fields,
+        total=total,
+    )
 
 
 # TODO: `recursive` flag.
@@ -54,7 +58,11 @@ def from_dataclass(
         if total and _dataclass_field_has_default(field):
             field_type = NotRequired[field_type]  # pyright: ignore
         fields[field.name] = field_type
-    return TypedDict(schema.__name__, fields, total=total)  # type: ignore[operator]
+    return TypedDict(
+        schema.__name__,  # type: ignore[operator]
+        fields,
+        total=total,
+    )
 
 
 def _dataclass_field_has_default(field: dataclasses.Field[object]) -> bool:

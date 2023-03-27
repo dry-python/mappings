@@ -2,11 +2,6 @@
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-
-[tool.nitpick]
-style = "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/nitpick-style-wemake.toml"
-
-
 [tool.poetry]
 name = "typed_dict"
 description = "Like attrs, but for dicts!"
@@ -36,7 +31,7 @@ mypy = "*"
 
 wemake-python-styleguide = "*"
 flake8-pytest-style = "*"
-nitpick = "*"
+requests-cache = "0.9.2"  # https://github.com/andreoliwa/nitpick/issues/514
 
 safety = "*"
 
@@ -87,3 +82,6 @@ addopts = [
     "--cov-branch",
     "--cov-fail-under=100",
 ]
+
+[tool.isort]
+profile = "wemake"

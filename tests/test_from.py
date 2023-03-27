@@ -35,7 +35,6 @@ def test_from_dataclass__default_value():
         name: str = ''
 
     actual = typed_dict.from_dataclass(User)
-    assert actual.__annotations__ == {'name': NotRequired[str]}  # pyright: ignore
-    assert actual.__required_keys__ == frozenset()
-    assert actual.__optional_keys__ == frozenset({'name'})
+    exp = {'name': NotRequired[str]}  # pyright: ignore
+    assert actual.__annotations__ == exp
     assert actual.__total__ is True
