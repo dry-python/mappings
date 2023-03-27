@@ -1,0 +1,63 @@
+# https://taskfile.dev
+
+version: "3"
+
+tasks:
+  install-poetry:
+    status:
+      - which poetry
+    cmds:
+      - curl -sSL https://install.python-poetry.org | python3 -
+
+  install:
+    sources:
+      - pyproject.toml
+      - poetry.lock
+    deps:
+      - install-poetry
+    cmds:
+      - poetry install
+
+  pytest:
+    deps:
+      - install
+    cmds:
+      - poetry run pytest {{.CLI_ARGS}}
+
+  mypy:
+    deps:
+      - install
+    cmds:
+      - poetry run mypy {{.CLI_ARGS}}
+
+  flake8:
+    deps:
+      - install
+    cmds:
+      - poetry run flake8 {{.CLI_ARGS}} .
+
+  poetry-check:
+    sources:
+      - pyproject.toml
+    deps:
+      - install-poetry
+    cmds:
+      - poetry check
+
+  pip-check:
+    sources:
+      - pyproject.toml
+      - poetry.lock
+    deps:
+      - install
+    cmds:
+      - poetry run pip check
+
+  all:
+    desc: run all linters and tests
+    cmds:
+      - task: mypy
+      - task: flake8
+      - task: poetry-check
+      - task: pip-check
+      - task: pytest
