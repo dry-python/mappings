@@ -38,6 +38,7 @@ safety = "*"
 pytest = "*"
 pytest-cov = "*"
 pytest-randomly = "*"
+pydantic = "*"
 
 sphinx = "*"
 sphinx-autodoc-typehints = "*"
@@ -71,6 +72,9 @@ warn_unreachable = true
 norecursedirs = [
     "docs",
     "examples",
+]
+markers = [
+    "integration",
 ]
 addopts = [
     "--strict-markers",
