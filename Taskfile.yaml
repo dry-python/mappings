@@ -24,11 +24,17 @@ tasks:
     cmds:
       - poetry run pytest {{.CLI_ARGS}}
 
+  mypy-test:
+    deps:
+      - install
+    cmds:
+      - poetry run python3 -m mypy_test {{.CLI_ARGS}} types/*.py
+
   mypy:
     deps:
       - install
     cmds:
-      - poetry run mypy {{.CLI_ARGS}}
+      - poetry run mypy --show-traceback {{.CLI_ARGS}}
 
   flake8:
     deps:
@@ -59,12 +65,28 @@ tasks:
     cmds:
       - poetry run pip check
 
-  all:
-    desc: run all code formatters, linters, and tests
+  format:
+    desc: run all code formatters
     cmds:
       - task: isort
+
+  lint:
+    desc: run all linters
+    cmds:
       - task: mypy
       - task: flake8
       - task: poetry-check
       - task: pip-check
+
+  test:
+    desc: run all tests
+    cmds:
+      - task: mypy-test
       - task: pytest
+
+  all:
+    desc: run all code formatters, linters, and tests
+    cmds:
+      - task: format
+      - task: lint
+      - task: test

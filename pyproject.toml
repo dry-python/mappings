@@ -46,9 +46,13 @@ doc8 = "*"
 m2r2 = "*"
 tomlkit = "*"
 
+[tool.poetry.group.dev.dependencies]
+mypy-test = "^0.1.2"
+
 [tool.mypy]
 files = ["typed_dict", "tests"]
 python_version = "3.8"
+plugins = "typed_dict._mypy_plugin"
 
 allow_redefinition = false
 check_untyped_defs = true
