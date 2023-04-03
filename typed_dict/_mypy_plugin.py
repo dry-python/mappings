@@ -2,14 +2,11 @@ from __future__ import annotations
 
 from typing import Callable
 
-from mypy import nodes, types
-from mypy.plugin import (
-    DynamicClassDefContext,
-    Plugin,
-    SemanticAnalyzerPluginInterface,
-)
+from mypy import nodes
+from mypy.plugin import DynamicClassDefContext, Plugin
 
 from ._from import from_dataclass
+from ._mypy_ast import Model
 
 FROM_DATACLASS_FULLNAME = f'{from_dataclass.__module__}.{from_dataclass.__qualname__}'
 FALLBACKS = (
@@ -39,53 +36,14 @@ class TypedDictPlugin(Plugin):
         ctx: DynamicClassDefContext,
     ) -> None:
         first_arg = ctx.call.args[0]
-        if not isinstance(first_arg, nodes.NameExpr):
+        if not isinstance(first_arg, (nodes.NameExpr, nodes.MemberExpr)):
             return
         if not isinstance(first_arg.node, nodes.TypeInfo):
             return
-        ctx.api.add_symbol_table_node(
-            ctx.name, nodes.SymbolTableNode(
-                kind=nodes.GDEF,
-                node=self._build_typeddict_typeinfo(
-                    api=ctx.api,
-                    name=first_arg.node.name,
-                    names=first_arg.node.names,
-                    required_keys=set(),
-                    line=ctx.call.line,
-                ),
-            ),
-        )
-
-    def _build_typeddict_typeinfo(  # noqa: WPS211
-        self,
-        api: SemanticAnalyzerPluginInterface,
-        name: str,
-        names: nodes.SymbolTable,
-        required_keys: set[str],
-        line: int,
-    ) -> nodes.TypeInfo:
-        fallback = self._get_fallback(api)
-        type_info = api.basic_new_typeinfo(name, fallback, line)
-        any_type = api.lookup_fully_qualified('typing.Any').type
-        assert any_type is not None
-        type_info.update_typeddict_type(
-            types.TypedDictType(
-                items={name: node.type or any_type for name, node in names.items()},
-                required_keys=required_keys,
-                fallback=fallback,
-            ),
-        )
-        return type_info
-
-    def _get_fallback(
-        self,
-        api: SemanticAnalyzerPluginInterface,
-    ) -> types.Instance:
-        for name in FALLBACKS:
-            fallback = api.named_type_or_none(name, [])
-            if fallback is not None:
-                return fallback
-        raise LookupError('cannot find fallback type for TypedDict')
+        model = Model.from_dataclass(first_arg.node)
+        type_info = model.as_type_info(api=ctx.api, line=ctx.call.line)
+        stnode = nodes.SymbolTableNode(kind=nodes.GDEF, node=type_info)
+        ctx.api.add_symbol_table_node(ctx.name, stnode)
 
 
 def plugin(version: str) -> type[Plugin]:
