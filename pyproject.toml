@@ -48,9 +48,9 @@ m2r2 = "*"
 tomlkit = "*"
 
 [tool.mypy]
-files = ["typed_dict", "tests"]
+files = ["typed_dict", "tests", "examples"]
 python_version = "3.8"
-plugins = "typed_dict"
+plugins = ["typed_dict"]
 
 allow_redefinition = false
 check_untyped_defs = true

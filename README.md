@@ -9,7 +9,7 @@ Like attrs, but for dicts
 
 What it can do:
 
-+ Generate TypedDict from pydantic models, attrs schemas, and dataclasses.
++ Generate [TypedDict](https://docs.python.org/3/library/typing.html#typing.TypedDict) from pydantic models, attrs schemas, and dataclasses.
 + Validate dicts using TypedDict at runtime.
 
 Why it's cool:
@@ -19,6 +19,48 @@ Why it's cool:
 
 ## Installation
 
+Install:
+
 ```bash
 python3 -m pip install typed-dict
 ```
+
+And then add in `plugins` section of the [mypy config](https://mypy.readthedocs.io/en/stable/config_file.html) (`pyproject.toml`):
+
+```toml
+[tool.mypy]
+plugins = ["typed_dict"]
+```
+
+## Usage
+
+Generate a TypedDict from a [dataclass](https://docs.python.org/3/library/dataclasses.html):
+
+```python
+from dataclasses import dataclass
+import typed_dict
+
+@dataclass
+class User:
+    name: str
+    age: int = 99
+
+UserDict = typed_dict.from_dataclass(User)
+```
+
+Now, you can use it in type annotations (and [mypy](https://mypy-lang.org/) will understand it):
+
+```python
+user: UserDict = {'name': 'aragorn'}
+```
+
+Or with runtime type checkers, like [pydantic](https://github.com/pydantic/pydantic):
+
+```python
+import pydantic
+
+user = pydantic.parse_obj_as(UserDict, {'name': 'Aragorn'})
+assert user == {'name': 'Aragorn'}
+```
+
+See [examples](./examples/) directory for more code.

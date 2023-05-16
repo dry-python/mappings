@@ -55,9 +55,8 @@ def _get_func_field_type(func_param: inspect.Parameter) -> object:
         field_type = NotRequired[field_type]  # pyright: ignore
     return field_type
 
+
 # TODO: `recursive` flag.
-
-
 def from_dataclass(
     schema: type[DataclassType],
     *,
