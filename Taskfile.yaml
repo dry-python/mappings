@@ -28,7 +28,11 @@ tasks:
     deps:
       - install
     cmds:
-      - poetry run mypy --show-traceback {{.CLI_ARGS}}
+      - >
+        poetry run mypy
+        --show-traceback
+        --enable-incomplete-feature=Unpack
+        {{.CLI_ARGS}}
 
   flake8:
     deps:
