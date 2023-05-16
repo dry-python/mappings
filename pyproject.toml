@@ -50,7 +50,7 @@ tomlkit = "*"
 [tool.mypy]
 files = ["typed_dict", "tests"]
 python_version = "3.8"
-plugins = "typed_dict._mypy_plugin"
+plugins = "typed_dict"
 
 allow_redefinition = false
 check_untyped_defs = true
