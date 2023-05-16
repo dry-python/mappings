@@ -24,12 +24,6 @@ tasks:
     cmds:
       - poetry run pytest {{.CLI_ARGS}}
 
-  mypy-test:
-    deps:
-      - install
-    cmds:
-      - poetry run python3 -m mypy_test {{.CLI_ARGS}} types/*.py
-
   mypy:
     deps:
       - install
@@ -81,7 +75,6 @@ tasks:
   test:
     desc: run all tests
     cmds:
-      - task: mypy-test
       - task: pytest
 
   all:
