@@ -2,13 +2,8 @@
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-
-[tool.nitpick]
-style = "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/nitpick-style-wemake.toml"
-
-
 [tool.poetry]
-name = "mappings"
+name = "typed_dict"
 description = "Like attrs, but for dicts!"
 version = "0.1.0"
 license = "BSD-3-Clause"
@@ -22,30 +17,80 @@ repository = "https://github.com/dry-python/mappings"
 keywords = []
 
 classifiers = [
-  "Development Status :: 3 - Alpha",
-  "Intended Audience :: Developers",
-  "Operating System :: OS Independent",
-  "Topic :: Software Development :: Libraries :: Python Modules",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.6,<3.9"
+python = ">=3.8,<3.11"
+mypy = "*"
+typing-extensions = "^4.5.0"
 
 [tool.poetry.dev-dependencies]
-mypy = "^0.780"
+wemake-python-styleguide = "*"
+flake8-pytest-style = "*"
+requests-cache = "0.9.2"  # https://github.com/andreoliwa/nitpick/issues/514
 
-wemake-python-styleguide = "^0.14"
-flake8-pytest-style = "^1.2"
-nitpick = "^0.22"
+safety = "*"
 
-safety = "^1.9"
+pydantic = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mypy-plugins = "*"
+pytest-randomly = "*"
 
-pytest = "^5.4"
-pytest-cov = "^2.10"
-pytest-randomly = "^3.4"
+sphinx = "*"
+sphinx-autodoc-typehints = "*"
+doc8 = "*"
+m2r2 = "*"
+tomlkit = "*"
 
-sphinx = "^3.1"
-sphinx-autodoc-typehints = "^1.11"
-doc8 = "^0.8"
-m2r2 = "^0.2"
-tomlkit = "^0.6"
+[tool.mypy]
+files = ["typed_dict", "tests", "examples"]
+python_version = "3.8"
+plugins = ["typed_dict"]
+
+allow_redefinition = false
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_untyped_calls = true
+ignore_errors = false
+ignore_missing_imports = true
+implicit_reexport = false
+local_partial_types = true
+strict_optional = true
+strict_equality = true
+no_implicit_optional = true
+warn_no_return = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unreachable = true
+
+
+[tool.pytest.ini_options]
+norecursedirs = [
+    "docs",
+    "examples",
+]
+markers = [
+    "integration",
+]
+addopts = [
+    "--strict-markers",
+    "--tb=short",
+    "--doctest-modules",
+    "--cov=typed_dict",
+    "--cov-report=term:skip-covered",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-branch",
+    "--cov-fail-under=75",
+    "--mypy-same-process",
+    "--mypy-ini-file=test-mypy.ini",
+]
+
+[tool.isort]
+profile = "wemake"

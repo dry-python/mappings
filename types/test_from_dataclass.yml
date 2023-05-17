@@ -1,0 +1,59 @@
+- case: from_dataclass_same_file
+  main: |
+    from __future__ import annotations
+    from dataclasses import dataclass
+    import typed_dict
+
+    @dataclass
+    class User:
+        name: str
+        age: int = 99
+
+    UDict = typed_dict.from_dataclass(User)
+    _1: UDict = {'name': 'aragorn', 'age': 88}
+    _2: UDict = {'name': 'aragorn'}
+    _3: UDict = {{ val }}  # E: Incompatible types (expression has type "{{ act }}", TypedDict item "{{ field }}" has type "{{ exp }}")  [typeddict-item]
+
+  parametrized:
+    - val: "{'name': 88}"
+      field: name
+      act: int
+      exp: str
+    - val: "{'name': 'aragorn', 'age': 'idk'}"
+      field: age
+      act: str
+      exp: int
+
+- case: from_dataclass_imports
+
+  files:
+    - path: helpers.py
+      content: |
+        from __future__ import annotations
+        from dataclasses import dataclass
+
+        @dataclass
+        class User:
+            name: str
+            age: int = 99
+
+  main: |
+    from __future__ import annotations
+    from dataclasses import dataclass
+    import typed_dict
+    from helpers import User
+
+    UDict = typed_dict.from_dataclass(User)
+    _1: UDict = {'name': 'aragorn', 'age': 88}
+    _2: UDict = {'name': 'aragorn'}
+    _3: UDict = {{ val }}  # E: Incompatible types (expression has type "{{ act }}", TypedDict item "{{ field }}" has type "{{ exp }}")  [typeddict-item]
+
+  parametrized:
+    - val: "{'name': 88}"
+      field: name
+      act: int
+      exp: str
+    - val: "{'name': 'aragorn', 'age': 'idk'}"
+      field: age
+      act: str
+      exp: int

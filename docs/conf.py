@@ -14,6 +14,7 @@
 
 import os
 import sys
+from pathlib import Path
 
 import tomlkit
 
@@ -23,9 +24,8 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 def _get_project_meta():
-    with open('../pyproject.toml') as pyproject:
-        file_contents = pyproject.read()
-
+    path = Path(__file__).parent.parent / 'pyproject.toml'
+    file_contents = path.read_text()
     return tomlkit.parse(file_contents)['tool']['poetry']
 
 
@@ -117,7 +117,6 @@ autodoc_default_options = {
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
 html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
