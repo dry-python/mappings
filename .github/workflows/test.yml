@@ -24,6 +24,7 @@ jobs:
       - run: task install-poetry
       - run: poetry config virtualenvs.in-project true
       - run: task lint
+      - run: task test
       - uses: codecov/codecov-action@v1
         with:
           file: ./coverage.xml
